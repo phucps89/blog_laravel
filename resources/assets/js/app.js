@@ -21,5 +21,4 @@ require('jquery-datetimepicker');
 // const app = new Vue({
 //     el: '#app'
 // });
-window.$ = require('jquery');
-window.jQuery = require('jquery');
+global.$ = global.jQuery = require('jquery');

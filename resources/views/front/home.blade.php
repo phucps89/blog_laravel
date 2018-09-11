@@ -492,12 +492,5 @@
 
 <script src="{{asset('js/front.js')}}"></script>
 
-{{--<script src="common-js/tether.min.js"></script>--}}
-
-{{--<script src="common-js/bootstrap.js"></script>--}}
-
-{{--<script src="common-js/layerslider.js"></script>--}}
-
-
 </body>
 </html>

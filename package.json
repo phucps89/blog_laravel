@@ -38,7 +38,5 @@
         "jquery-validation": "^1.17.0",
         "jquery-datetimepicker": "^2.5.20"
     },
-    "dependencies": {
-
-    }
+    "dependencies": {}
 }
