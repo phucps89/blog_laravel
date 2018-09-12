@@ -14,6 +14,7 @@ Route::group(['prefix' => ADMIN, 'as' => ADMIN . '.', 'middleware'=>['auth', 'Ro
     Route::get('/', 'DashboardController@index')->name('dash');
     Route::resource('users', 'UserController');
     Route::resource('farm_breed_crop', 'FarmBreedCropController');
+    Route::resource('category', 'CategoryController');
 
     Route::resource('farm', 'FarmController');
     Route::get('farm/add-breed-crop/{id}', [

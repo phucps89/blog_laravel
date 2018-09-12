@@ -15,11 +15,11 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class='sidebar-link' href="{{ route(ADMIN . '.farm_breed_crop.index') }}" >
+    <a class='sidebar-link' href="{{ route(ADMIN . '.category.index') }}" >
         <span class="icon-holder">
             <i class="c-brown-500 ti-book"></i>
         </span>
-        <span class="title">Loại chăn nuôi & trồng trọt</span>
+        <span class="title">Category</span>
     </a>
 </li>
 <li class="nav-item">
