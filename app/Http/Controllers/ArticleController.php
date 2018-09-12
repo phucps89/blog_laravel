@@ -10,17 +10,9 @@ namespace App\Http\Controllers;
 
 
 use App\Libraries\Helpers;
-use App\Models\BreedCrop;
 use App\Models\Category;
-use App\Models\Farm;
 use App\Repositories\ArticleRepository;
-use App\Repositories\BreedCropRepository;
-use App\Repositories\CategoryRepository;
-use App\Repositories\FarmBreedCropDetailRepository;
-use App\Repositories\FarmRepository;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -49,36 +41,26 @@ class ArticleController extends Controller
         $request = Helpers::getRequestInstance();
         $isAjax = $request->get('ajax', 0);
         if($isAjax == 1){
-            $items = $this->_farmRepository->makeModel()->newQuery()
-                ->leftJoin('farm_breed_crop', 'farm_breed_crop.id', '=', 'farms.farm_breed_crop_id')
+            $items = $this->_articleRepository->makeModel()->newQuery()
+                ->leftJoin('categories', 'categories.id', '=', 'articles.id_category')
                 ->select([
-                    'farms.*',
-                    'farm_breed_crop.name as breed_crop_name'
+                    'articles.*',
+                    'categories.name as category_name'
                 ])
                 ->latest('updated_at')->paginate($request->get('length'));
             foreach ($items->items() as $item) {
-                $item->type_name = config('variables.farm_type')[$item->type];
-                $item->count_breed_crop = $item->farm_breed_crop_detail()->count();
                 $item->action = view('admin.action', [
-                    'routeEdit' => route(ADMIN . '.farm.edit', $item->id),
-                    'routeDelete' => route(ADMIN . '.farm.destroy', $item->id),
-                    'includes'    => [
-                        [
-                            'view'   => 'admin.farm.action_add_breed_crop',
-                            'params' => [
-                                'routeAddBreedCrop' => route(ADMIN . '.farm.add.breed-crop', ['id' => $item->id])
-                            ]
-                        ]
-                    ]
+                    'routeEdit' => route(ADMIN . '.article.edit', $item->id),
+                    'routeDelete' => route(ADMIN . '.article.destroy', $item->id),
                 ])->render();
             }
             return Helpers::formatPaginationDataTable($items);
         }
 
 
-        return view('admin.farm.index', [
+        return view('admin.article.index', [
             'mappingKey' => [
-                'name', 'code', 'address', 'desc', 'type_name', 'breed_crop_name', 'count_breed_crop', 'action'
+                'id', 'name', 'slug',
             ]
         ]);
     }
@@ -90,7 +72,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.article.create');
     }
 
     /**

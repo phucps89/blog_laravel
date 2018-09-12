@@ -23,23 +23,10 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class='sidebar-link' href="{{ route(ADMIN . '.farm.index') }}" >
+    <a class='sidebar-link' href="{{ route(ADMIN . '.article.index') }}" >
         <span class="icon-holder">
             <i class="c-brown-500 ti-book"></i>
         </span>
-        <span class="title">Chuồng trại</span>
+        <span class="title">Article</span>
     </a>
-</li>
-
-<li class="nav-item dropdown">
-    <a class="dropdown-toggle" href="javascript:void(0);">
-        <span class="icon-holder"><i
-                class="c-teal-500 ti-view-list-alt"></i> </span>
-        <span class="title">Gia súc & cây trồng</span>
-        <span class="arrow"><i class="ti-angle-right"></i></span>
-    </a>
-    <ul class="dropdown-menu">
-        <li class="nav-item dropdown"><a href="{{ route(ADMIN . '.breed_crop.index') }}"><span>Danh sách cá thể</span></a></li>
-        <li class="nav-item dropdown"><a href="{{ route(ADMIN . '.group_breed_crop.index') }}"><span>Danh sách nhóm</span></a></li>
-    </ul>
 </li>

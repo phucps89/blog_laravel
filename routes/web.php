@@ -14,7 +14,7 @@ Route::group(['prefix' => ADMIN, 'as' => ADMIN . '.', 'middleware'=>['auth', 'Ro
     Route::get('/', 'DashboardController@index')->name('dash');
     Route::resource('users', 'UserController');
     Route::resource('category', 'CategoryController');
-    Route::resource('article', 'CategoryController');
+    Route::resource('article', 'ArticleController');
 
 });
 

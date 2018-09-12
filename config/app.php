@@ -162,6 +162,7 @@ return [
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
         \App\Providers\GoogleDriveServiceProvider::class,
+        Barryvdh\Elfinder\ElfinderServiceProvider::class,
     ],
 
     /*

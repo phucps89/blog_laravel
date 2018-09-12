@@ -10,16 +10,9 @@ namespace App\Http\Controllers;
 
 
 use App\Libraries\Helpers;
-use App\Models\BreedCrop;
 use App\Models\Category;
-use App\Models\Farm;
-use App\Repositories\BreedCropRepository;
 use App\Repositories\CategoryRepository;
-use App\Repositories\FarmBreedCropDetailRepository;
-use App\Repositories\FarmRepository;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
