@@ -9,7 +9,19 @@
 namespace App\Http\Controllers;
 
 
-class ElfinderController
+class ElfinderController extends \Barryvdh\Elfinder\ElfinderController
 {
+    public function showTinyMCE4()
+    {
+        return $this->app['view']
+            ->make('tinymce4')
+            ->with($this->getViewVars());
+    }
 
+    public function showCKeditor4()
+    {
+        return $this->app['view']
+            ->make('ckeditor4')
+            ->with($this->getViewVars());
+    }
 }

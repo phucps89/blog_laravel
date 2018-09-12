@@ -1,7 +1,7 @@
 @extends('admin.default')
 
 @section('page-header')
-    Category <small>{{ trans('app.add_new_item') }}</small>
+    Article <small>{{ trans('app.add_new_item') }}</small>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
         ])
     !!}
 
-    @include('admin.category.form')
+    @include('admin.article.form')
 
     <button type="submit" class="btn btn-primary">{{ trans('app.add_button') }}</button>
 

@@ -37,7 +37,7 @@ export default (function () {
   // ------------------------------------------------------
 
   // Trigger resize on any element click
-  document.addEventListener('click', () => {
-    window.dispatchEvent(window.EVENT);
-  });
+  // document.addEventListener('click', () => {
+  //   window.dispatchEvent(window.EVENT);
+  // });
 }());

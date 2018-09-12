@@ -13,12 +13,22 @@
                     </div>
                 </div>
             @endif
-            {!! Form::myInput('text', 'icon', 'Icon') !!}
+            {!! Form::myTextArea('full_desc', 'Full desc', [
+                'filebrowserbrowseurl' => route('elfinder.ckeditor')
+            ]) !!}
         </div>
     </div>
 </div>
 
 @section('js')
+    <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
+    <script src="{{asset('ckeditor/sample.js')}}"></script>
+    <script>
+        initEditor('full_desc');
+        {{--CKEDITOR.replace( 'full_desc', {--}}
+            {{--filebrowserBrowseUrl : '{{route('elfinder.ckeditor')}}', // eg. 'includes/elFinder/elfinder-cke.html'--}}
+        {{--} );--}}
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             @if(empty(@$item->id_parent))

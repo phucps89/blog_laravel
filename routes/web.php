@@ -28,4 +28,11 @@ Route::get('/', function () {
     return view('front.home');
 });
 
+Route::get('/elfinder/tinymce4', [
+    'uses' => 'ElfinderController@showTinyMCE4'
+]);
 
+Route::get('/elfinder/ckeditor', [
+    'as' => 'elfinder.ckeditor',
+    'uses' => 'ElfinderController@showCKeditor4'
+]);

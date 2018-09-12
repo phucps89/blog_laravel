@@ -1,15 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Admin
- * Date: 9/12/2018
- * Time: 7:45 PM
- */
 
 namespace App\Http\Controllers;
 
+use App\Repositories\FarmBreedCropRepository;
+use Illuminate\Http\Request;
 
-class DashboardController
+class DashboardController extends Controller
 {
-
+    public function index()
+    {
+        return view('admin.dashboard.index');
+    }
 }
