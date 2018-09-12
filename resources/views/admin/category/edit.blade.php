@@ -8,6 +8,7 @@
 	{!! Form::model($item, [
 			'action' => ['CategoryController@update', $item->id],
 			'method' => 'put',
+			'enctype' => 'multipart/form-data',
 		])
 	!!}
 

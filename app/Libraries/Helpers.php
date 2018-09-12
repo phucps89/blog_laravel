@@ -12,6 +12,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -614,5 +615,17 @@ class Helpers
      */
     public static function getRequestInstance(){
         return app('request');
+    }
+
+    /**
+     * @param null $disk
+     * @return FilesystemAdapter
+     */
+    public static function getStorage($disk = null){
+        if(empty($disk)){
+            return \Storage::cloud();
+        }
+
+        return \Storage::disk($disk);
     }
 }

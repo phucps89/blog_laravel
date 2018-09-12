@@ -161,6 +161,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
+        \App\Providers\GoogleDriveServiceProvider::class,
     ],
 
     /*
