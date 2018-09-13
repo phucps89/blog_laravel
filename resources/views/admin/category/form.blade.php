@@ -6,10 +6,10 @@
             {!! Form::mySelect('id_parent', 'Parent <span class="c-red-500">*</span>', \App\Repositories\CategoryRepository::getInstance()->getRootCategories(@$item->id)->pluck('name', 'id'), @$item->id_parent) !!}
             <div style="margin-top: -5px; margin-bottom: 1rem"><a href="javascript:resetParent()">Not selected</a></div>
             {!! Form::myFile('image', 'Image') !!}
-            @if(@$item->image)
+            @if(@$item->image_url)
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-3">
-                        <img src="{{$item->image}}" class="img-thumbnail" style="margin-bottom: 1rem" />
+                        <img src="{{$item->image_url}}" class="img-thumbnail" style="margin-bottom: 1rem" />
                     </div>
                 </div>
             @endif

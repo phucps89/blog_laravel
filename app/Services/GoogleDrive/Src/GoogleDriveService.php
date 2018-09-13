@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\S3\Src;
+namespace App\Services\GoogleDrive\Src;
 
 use App\Libraries\Helpers;
 use App\Services\GoogleDrive\Src\GoogleDriveObject;
@@ -8,6 +8,7 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\FileNotFoundException;
 
 /**
  * Created by PhpStorm.
@@ -32,34 +33,102 @@ class GoogleDriveService
      *
      * @return false|GoogleDriveObject
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \Exception
      */
-    public function upload(string $path, $srcFile, $nameFile, $options = []) {
+    public function upload(string $path, $srcFile, $nameFile, $options = [])
+    {
         $path = trim($path);
+        $path = $this->convertToGoogleDrivePath($path, 'dir');
         $result = $this->_storage->putFileAs($path, $srcFile, $nameFile, $options);
-        if($result !== false)
-            return new GoogleDriveObject($this->_storage->getMetadata($nameFile));
+        if ($result !== false)
+            return $this->getObject($path, $nameFile);
         else return false;
     }
 
-    protected function convertToGoogleDrivePath(string $path){
+    /**
+     * @param string $path
+     * @param string $type
+     * @return string
+     * @throws FileNotFoundException
+     */
+    public function convertToGoogleDrivePath(string $path, $type = 'file')
+    {
         $pathArray = explode('/', $path);
         $pathArray = array_filter($pathArray);
-        $fullPath = '';
-        foreach ($pathArray as $item) {
+        $drivePath = '';
+        $count = count($pathArray);
+        foreach ($pathArray as $index => $item) {
+            if ($index == $count - 1) {
+                $object = $this->getObject($drivePath, $item, $type);
+            }
+            else {
+                $object = $this->getObject($drivePath, $item, 'dir');
+            }
 
+            if ($object) {
+                $drivePath = $object->path;
+            }
+            else {
+                throw new FileNotFoundException($path);
+            }
         }
+        return $drivePath;
     }
 
-    protected function makeDir(){
+    protected function makeDir()
+    {
 
     }
 
-    protected function getListContents($googleDrivePath, $recursive = false){
-        return collect(Storage::cloud()->listContents($googleDrivePath, $recursive));
+    /**
+     * @param $googleDrivePath
+     * @param string $objectName
+     * @param string $type
+     * @return GoogleDriveObject
+     */
+    public function getObject($googleDrivePath, $objectName, $type = 'file')
+    {
+        $fileName = pathinfo($objectName, PATHINFO_FILENAME);
+
+        $collection = $this->getListContents($googleDrivePath);
+        $collection = $collection->where('type', '=', $type)
+            ->where('filename', '=', $fileName);
+        if ($type == 'file') {
+            $ext = pathinfo($objectName, PATHINFO_EXTENSION);
+            $collection = $collection->where('extension', '=', $ext);
+        }
+        return new GoogleDriveObject($collection->first());
     }
 
-    public function download(string $path, string $pathOnLocal){
+    /**
+     * @param string $googleDrivePath
+     * @return GoogleDriveObject
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function getMetaData($googleDrivePath)
+    {
+        return new GoogleDriveObject($this->_storage->getMetadata($googleDrivePath));
+    }
+
+    public function getListContents($googleDrivePath, $recursive = false)
+    {
+        return collect(Helpers::getStorage()->listContents($googleDrivePath, $recursive));
+    }
+
+    /**
+     * @param string $path
+     * @param string $pathOnLocal
+     * @param bool $convert
+     * @param string $type
+     * @throws FileNotFoundException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function download(string $path, string $pathOnLocal, $convert = true, $type = 'file')
+    {
         $path = trim($path);
+        if ($convert) {
+            $path = $this->convertToGoogleDrivePath($path, $type);
+        }
         $content = $this->_storage->get($path);
         Storage::put($pathOnLocal, $content);
     }
@@ -67,20 +136,55 @@ class GoogleDriveService
     /**
      * @param string $path
      *
+     * @param bool $convert
+     * @param string $type
      * @return bool
+     * @throws FileNotFoundException
      */
-    public function exists(string $path){
+    public function exists(string $path, $convert = true, $type = 'file')
+    {
         $path = trim($path);
+        if ($convert) {
+            $path = $this->convertToGoogleDrivePath($path, $type);
+        }
         return $this->_storage->exists($path);
     }
 
     /**
      * @param string $path
      *
+     * @param bool $convert
+     * @param string $type
      * @return string
+     * @throws FileNotFoundException
      */
-    public function getUrl(string $path) : string {
+    public function getUrl(string $path, $convert = true, $type = 'file')
+    {
         $path = trim($path);
+        if ($convert) {
+            $path = $this->convertToGoogleDrivePath($path, $type);
+        }
         return $this->_storage->url($path);
+    }
+
+    /**
+     * @param string $path
+     * @param bool $convert
+     * @param string $type
+     * @return bool
+     * @throws FileNotFoundException
+     */
+    public function delete(string $path, $convert = true, $type = 'file')
+    {
+        $path = trim($path);
+        if ($convert) {
+            $path = $this->convertToGoogleDrivePath($path, $type);
+        }
+        if ($type == 'file') {
+            return $this->_storage->delete($path);
+        }
+        else {
+            return $this->_storage->deleteDir($path);
+        }
     }
 }

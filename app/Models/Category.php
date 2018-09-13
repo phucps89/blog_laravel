@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_parent
  * @property string $name
  * @property string $slug
- * @property string $image
+ * @property string $image_url
+ * @property string $image_path
  * @property string $icon
  * @property string $created_at
  * @property string $updated_at
@@ -19,7 +20,7 @@ class Category extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_parent', 'name', 'slug', 'image', 'icon', 'created_at', 'updated_at'];
+    protected $fillable = ['id_parent', 'name', 'slug', 'image_url', 'image_path', 'icon', 'created_at', 'updated_at'];
 
     public static function rules($update = false, $id = null)
     {

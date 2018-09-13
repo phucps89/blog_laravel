@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Libraries\Helpers;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
+use App\Services\GoogleDrive\GoogleDriveFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -78,10 +79,13 @@ class CategoryController extends Controller
 
         $this->validate($request, Category::rules());
 
-        $fileImage = $request->file('image');
-        $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
-        Helpers::getStorage()->putFileAs(null, $fileImage, $fileName);
-        $data['image'] = Helpers::getStorage()->url($fileName);
+        if ($data['image']) {
+            $fileImage = $request->file('image');
+            $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
+            $gdObj = GoogleDriveFacade::upload('category', $fileImage, $fileName);
+            $data['image_url'] = GoogleDriveFacade::getUrl($gdObj->path, false);
+            $data['image_path'] = 'category/' . $fileName;
+        }
 
         $this->_categoryRepository->create(array_merge(
             $data
@@ -139,12 +143,19 @@ class CategoryController extends Controller
 
         $this->validate($request, Category::rules(true, $id));
 
-        $fileImage = $request->file('image');
-        $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
-        Helpers::getStorage()->putFileAs(null, $fileImage, $fileName);
-        $data['image'] = Helpers::getStorage()->url($fileName);
+        if ($data['image']) {
+            $fileImage = $request->file('image');
+            $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
+            $gdObj = GoogleDriveFacade::upload('category', $fileImage, $fileName);
+            $data['image_url'] = GoogleDriveFacade::getUrl($gdObj->path, false);
+            $data['image_path'] = 'category/' . $fileName;
+        }
 
         $item = $this->_categoryRepository->find($id);
+
+        if($item->image_path){
+            GoogleDriveFacade::delete($item->image_path);
+        }
 
         $item->update(array_merge($data, [
         ]));
