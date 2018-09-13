@@ -79,7 +79,7 @@ class CategoryController extends Controller
 
         $this->validate($request, Category::rules());
 
-        if ($data['image']) {
+        if (!empty($data['image'])) {
             $fileImage = $request->file('image');
             $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
             $gdObj = GoogleDriveFacade::upload('category', $fileImage, $fileName);
@@ -143,7 +143,7 @@ class CategoryController extends Controller
 
         $this->validate($request, Category::rules(true, $id));
 
-        if ($data['image']) {
+        if (!empty($data['image'])) {
             $fileImage = $request->file('image');
             $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
             $gdObj = GoogleDriveFacade::upload('category', $fileImage, $fileName);

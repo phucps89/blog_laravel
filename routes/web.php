@@ -24,9 +24,10 @@ Route::get('/state-country/{id}', [
 ])->where('id', '[0-9]+');
 
 
-Route::get('/', function () {
-    return view('front.home');
-});
+Route::get('/', [
+    'as' => 'home',
+    'uses' => 'HomeController@index'
+]);
 
 Route::get('/elfinder/tinymce4', [
     'uses' => 'ElfinderController@showTinyMCE4'

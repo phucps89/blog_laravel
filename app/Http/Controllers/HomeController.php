@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+//        foreach (CategoryRepository::getInstance()->getRootCategories() as $rootCategory) {
+//            echo $rootCategory->name;
+//        }
+//        exit;
+        return view('front.home');
     }
 }

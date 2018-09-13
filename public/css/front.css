@@ -12700,5 +12700,14 @@ footer .social-icons > li > a{ padding-left: 15px; }
 @media only screen and (max-width: 290px) {
 	
 	
+}#header_name {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 35px;
+  color: #484848;
+  line-height: 1.4em;
+  letter-spacing: 0.01em;
+  margin-top: 3.5rem;
+  margin-bottom: 3.3rem;
 }
 
