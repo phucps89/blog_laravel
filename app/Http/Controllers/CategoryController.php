@@ -153,7 +153,7 @@ class CategoryController extends Controller
 
         $item = $this->_categoryRepository->find($id);
 
-        if($item->image_path){
+        if($item->image_path && !empty($data['image_url'])){
             GoogleDriveFacade::delete($item->image_path);
         }
 

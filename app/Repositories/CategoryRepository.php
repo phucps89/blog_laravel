@@ -40,4 +40,11 @@ class CategoryRepository extends BaseRepository
 
         return $query->get();
     }
+
+    public function getChildCategory(){
+        $query = $this->makeModel()
+            ->newQuery()
+            ->whereNotNull('id_parent');
+        return $query->get();
+    }
 }

@@ -6,13 +6,13 @@
 
 @section('content')
 	{!! Form::model($item, [
-			'action' => ['CategoryController@update', $item->id],
+			'action' => ['ArticleController@update', $item->id],
 			'method' => 'put',
 			'enctype' => 'multipart/form-data',
 		])
 	!!}
 
-		@include('admin.category.form')
+		@include('admin.article.form')
 
 		<button type="submit" class="btn btn-primary">{{ trans('app.edit_button') }}</button>
 

@@ -6,7 +6,7 @@
 
 @section('content')
     {!! Form::open([
-            'action' => ['CategoryController@store'],
+            'action' => ['ArticleController@store'],
             'enctype' => 'multipart/form-data',
         ])
     !!}

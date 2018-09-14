@@ -12,6 +12,7 @@
 
     <!-- Styles -->
 	<link href="{{ mix('/css/app.css') }}" rel="stylesheet">
+	<link href="{{ asset('tag/css/jquery.tagit.css') }}" rel="stylesheet">
 
 	@yield('css')
 
@@ -54,6 +55,8 @@
 
     <script src="{{ mix('/js/app.js') }}"></script>
     <script src="{{ mix('/js/app-custom.js') }}"></script>
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>--}}
+    <script src="{{asset('tag/js/tag-it.js')}}"></script>
 
     @yield('js')
 

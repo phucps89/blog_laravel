@@ -9,7 +9,9 @@ require('./bootstrap');
 require('jquery-validation');
 require('jquery-datetimepicker');
 // window.Vue = require('vue');
-
+require('jquery-ui');
+require('jquery-ui/ui/widget');
+require('jquery-ui/ui/widgets/autocomplete');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

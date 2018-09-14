@@ -1,3 +1,5 @@
+// require('jquery-ui/ui/widgets/autocomplete');
+
 import * as $ from 'jquery';
 import 'datatables';
 

@@ -10,8 +10,10 @@ namespace App\Http\Controllers;
 
 
 use App\Libraries\Helpers;
+use App\Models\Article;
 use App\Models\Category;
 use App\Repositories\ArticleRepository;
+use App\Services\GoogleDrive\GoogleDriveFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -60,7 +62,7 @@ class ArticleController extends Controller
 
         return view('admin.article.index', [
             'mappingKey' => [
-                'id', 'name', 'slug',
+                'id', 'name', 'slug', 'action'
             ]
         ]);
     }
@@ -80,6 +82,7 @@ class ArticleController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(Request $request)
     {
@@ -93,18 +96,21 @@ class ArticleController extends Controller
             'slug' => $data['slug']
         ]);
 
-        $this->validate($request, Category::rules());
+        $this->validate($request, Article::rules());
 
-        $fileImage = $request->file('image');
-        $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
-        Helpers::getStorage()->putFileAs(null, $fileImage, $fileName);
-        $data['image'] = Helpers::getStorage()->url($fileName);
+        if (!empty($data['image'])) {
+            $fileImage = $request->file('image');
+            $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
+            $gdObj = GoogleDriveFacade::upload('article', $fileImage, $fileName);
+            $data['image_url'] = GoogleDriveFacade::getUrl($gdObj->path, false);
+            $data['image_path'] = 'article/' . $fileName;
+        }
 
-        $this->_categoryRepository->create(array_merge(
+        $this->_articleRepository->create(array_merge(
             $data
         ));
 
-        return redirect()->route('admin.category.index')->withSuccess(trans('app.success_store'));
+        return redirect()->route('admin.article.index')->withSuccess(trans('app.success_store'));
     }
 
     /**
@@ -126,9 +132,9 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        $item = $this->_categoryRepository->find($id);
+        $item = $this->_articleRepository->find($id);
 
-        return view('admin.category.edit', compact('item'));
+        return view('admin.article.edit', compact('item'));
     }
 
     /**
@@ -156,17 +162,24 @@ class ArticleController extends Controller
 
         $this->validate($request, Category::rules(true, $id));
 
-        $fileImage = $request->file('image');
-        $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
-        Helpers::getStorage()->putFileAs(null, $fileImage, $fileName);
-        $data['image'] = Helpers::getStorage()->url($fileName);
+        if (!empty($data['image'])) {
+            $fileImage = $request->file('image');
+            $fileName = uniqid() . '_' . $fileImage->getClientOriginalName();
+            $gdObj = GoogleDriveFacade::upload('category', $fileImage, $fileName);
+            $data['image_url'] = GoogleDriveFacade::getUrl($gdObj->path, false);
+            $data['image_path'] = 'category/' . $fileName;
+        }
 
-        $item = $this->_categoryRepository->find($id);
+        $item = $this->_articleRepository->find($id);
+
+        if($item->image_path && !empty($data['image_url'])){
+            GoogleDriveFacade::delete($item->image_path);
+        }
 
         $item->update(array_merge($data, [
         ]));
 
-        return redirect()->route(ADMIN . '.category.index')->withSuccess(trans('app.success_update'));
+        return redirect()->route(ADMIN . '.article.index')->withSuccess(trans('app.success_update'));
     }
 
     /**
